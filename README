@@ -1,0 +1,4 @@
+Symlink "fckeditor.rb" into the "fckeditor" folder with other files like: "fckeditor_php5.php", "fckeditor.py" and so on.
+
+On Ubuntu:
+sudo ln -s fckeditor.rb /usr/share/fckeditor/fckeditor.rb
