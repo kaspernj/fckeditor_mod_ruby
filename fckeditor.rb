@@ -52,6 +52,8 @@ class FCKeditor
 	# @param string $instanceName
 	def initialize(instanceName)
 		require "knjrbfw/libknjphpfuncs.rb"
+		require "knjrbfw/libknjweb.rb"
+		Knj::Web::global_params
 		
 		@InstanceName = instanceName
 		@BasePath = '/fckeditor/'
