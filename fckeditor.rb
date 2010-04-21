@@ -131,10 +131,9 @@ class FCKeditor
 		elsif (strpos(sAgent, 'Opera/') != false)
 			fVersion = substr(sAgent, strpos(sAgent, 'Opera/') + 6, 4)
 			return (fVersion >= 9.5)
-		elsif (sAgent and sAgent.match("|AppleWebKit/(\d+)|i"))
-			matches = sAgent.match("|AppleWebKit/(\d+)|i")
-			iVersion = matches[1]
-			return (matches[1] >= 522)
+		elsif sAgent and sAgent.match(/AppleWebKit\/([0-9]+)/)
+			matches = sAgent.match(/AppleWebKit\/([0-9]+)/)
+			return (matches[1].to_i >= 522)
 		else
 			return false
 		end
