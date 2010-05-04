@@ -1,4 +1,8 @@
+require "knj/autoload"
+
 class FCKeditor
+	include Knj::Php
+	
 	# Name of the FCKeditor instance.
 	#
 	# @access protected
@@ -51,8 +55,6 @@ class FCKeditor
 	#
 	# @param string $instanceName
 	def initialize(instanceName)
-		require "knjrbfw/libknjphpfuncs.rb"
-		require "knjrbfw/libknjweb.rb"
 		Knj::Web::global_params
 		
 		@InstanceName = instanceName
@@ -123,7 +125,7 @@ class FCKeditor
 		sAgent = Apache.request.headers_in["User-Agent"]
 		
 		if (strpos(sAgent, 'MSIE') != false and strpos(sAgent, 'mac') == false and strpos(sAgent, 'Opera') == false)
-			iVersion = substr(sAgent, strpos(sAgent, 'MSIE') + 5, 3)
+			iVersion = substr(sAgent, strpos(sAgent, 'MSIE') + 5, 3).to_f
 			return (iVersion >= 5.5)
 		elsif (strpos(sAgent, 'Gecko/') != false)
 			iVersion = substr(sAgent, strpos(sAgent, 'Gecko/') + 6, 8)
