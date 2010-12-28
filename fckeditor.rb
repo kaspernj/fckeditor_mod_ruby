@@ -55,7 +55,14 @@ class FCKeditor
 	#
 	# @param string $instanceName
 	def initialize(instanceName)
-		Knj::Web::global_params
+		if Object.respond_to?(:_get, true)
+			@get = _get
+			@useragent = _meta["HTTP_USER_AGENT"]
+		else
+			Knj::Web::global_params
+			@get = $_GET
+			@useragent = Apache.request.headers_in["User-Agent"]
+		end
 		
 		@InstanceName = instanceName
 		@BasePath = '/fckeditor/'
@@ -79,7 +86,7 @@ class FCKeditor
 		@Html = ''
 		
 		if (self.IsCompatible)
-			if (isset($_GET['fcksource']) and $_GET['fcksource'] == "true")
+			if (isset(@get['fcksource']) and @get['fcksource'] == "true")
 				filevar = 'fckeditor.original.html'
 			else
 				filevar = 'fckeditor.html'
@@ -122,7 +129,7 @@ class FCKeditor
 	#
 	# @return boolean
 	def IsCompatible
-		sAgent = Apache.request.headers_in["User-Agent"]
+		sAgent = @useragent
 		
 		if (strpos(sAgent, 'MSIE') != false and strpos(sAgent, 'mac') == false and strpos(sAgent, 'Opera') == false)
 			iVersion = substr(sAgent, strpos(sAgent, 'MSIE') + 5, 3).to_f
