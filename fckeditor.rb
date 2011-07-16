@@ -78,6 +78,12 @@ class FCKeditor
 		print self.CreateHtml
 	end
 	
+	def self.is_null?(fckstr)
+    fckstr = fckstr.to_s.strip
+    return true if fckstr.length <= 0 or fckstr == "&nbsp;"
+    return false
+  end
+	
 	# Return the HTML code required to run FCKeditor.
 	#
 	# @return string
