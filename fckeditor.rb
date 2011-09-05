@@ -55,8 +55,6 @@ class FCKeditor
 	#
 	# @param string $instanceName
 	def initialize(instanceName)
-		Knj::Web::global_params
-		
 		@InstanceName = instanceName
 		@BasePath = '/fckeditor/'
 		@Width = '100%'
@@ -122,7 +120,7 @@ class FCKeditor
 	#
 	# @return boolean
 	def IsCompatible
-		sAgent = Apache.request.headers_in["User-Agent"]
+		sAgent = $_SERVER["HTTP_USER_AGENT"]
 		
 		if (strpos(sAgent, 'MSIE') != false and strpos(sAgent, 'mac') == false and strpos(sAgent, 'Opera') == false)
 			iVersion = substr(sAgent, strpos(sAgent, 'MSIE') + 5, 3).to_f
