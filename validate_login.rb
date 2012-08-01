@@ -2,7 +2,6 @@
 
 require "rubygems"
 require "knjrbfw"
-require "knj/autoload"
 
 tmp_path = nil
 ARGV.each do |val|
@@ -16,5 +15,5 @@ if !tmp_path
   exit
 end
 
-$validate_login = Knj::Php.json_decode(Knj::Php.base64_decode(File.read(tmp_path)))
+$validate_login = Php4r.json_decode(Php4r.base64_decode(File.read(tmp_path)))
 require $validate_login["args"]["script"]
