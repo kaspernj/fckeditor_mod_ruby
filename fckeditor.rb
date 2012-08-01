@@ -67,7 +67,7 @@ class FCKeditor
 	#
 	# @return string
 	def CreateHtml
-		@HtmlValue = htmlspecialchars(@Value)
+		@HtmlValue = Php4r.htmlspecialchars(@Value)
 		@Html = ''
 		
 		if self.IsCompatible
