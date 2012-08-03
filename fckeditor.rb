@@ -117,13 +117,13 @@ class FCKeditor
 		sAgent = @useragent
 		
 		if Php4r.strpos(sAgent, 'MSIE') != false and Php4r.strpos(sAgent, 'mac') == false and Php4r.strpos(sAgent, 'Opera') == false
-			iVersion = Php4r.substr(sAgent, strpos(sAgent, 'MSIE') + 5, 3).to_f
+			iVersion = Php4r.substr(sAgent, Php4r.strpos(sAgent, 'MSIE') + 5, 3).to_f
 			return (iVersion >= 5.5)
 		elsif Php4r.strpos(sAgent, 'Gecko/') != false
-			iVersion = Php4r.substr(sAgent, strpos(sAgent, 'Gecko/') + 6, 8)
+			iVersion = Php4r.substr(sAgent, Php4r.strpos(sAgent, 'Gecko/') + 6, 8)
 			return (iVersion.to_i >= 20030210)
 		elsif Php4r.strpos(sAgent, 'Opera/') != false
-			fVersion = Php4r.substr(sAgent, strpos(sAgent, 'Opera/') + 6, 4)
+			fVersion = Php4r.substr(sAgent, Php4r.strpos(sAgent, 'Opera/') + 6, 4)
 			return (fVersion >= 9.5)
 		elsif sAgent and sAgent.match(/AppleWebKit\/([0-9]+)/)
 			matches = sAgent.match(/AppleWebKit\/([0-9]+)/)
