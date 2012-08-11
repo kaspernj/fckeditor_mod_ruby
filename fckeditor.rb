@@ -1,54 +1,33 @@
-require "knj/autoload"
+if !Kernel.const_defined?(:Knj)
+  require "rubygems"
+  require "knjrbfw"
+end
 
 class FCKeditor
-	include Knj::Php
-	
 	# Name of the FCKeditor instance.
-	#
-	# @access protected
-	# @var string
-
-	# public $InstanceName
-
+  attr_accessor :InstanceName
+  
 	# Path to FCKeditor relative to the document root.
-	#
-	# @var string
-
-	# public $BasePath
-
+	attr_accessor :BasePath
+  
 	# Width of the FCKeditor.
 	# Examples: 100%, 600
-	#
-	# @var mixed
-
-	# public $Width
-
+  attr_accessor :Width
+  
 	# Height of the FCKeditor.
 	# Examples: 400, 50%
-	#
-	# @var mixed
-
-	# public $Height
-
+	attr_accessor :Height
+  
 	# Name of the toolbar to load.
-	#
-	# @var string
-
-	# public $ToolbarSet
-
+	attr_accessor :ToolbarSet
+  
 	# Initial value.
-	#
-	# @var string
-
-	# public $Value
+	attr_accessor :Value
 
 	# This is where additional configuration can be passed.
 	# Example:
 	# $oFCKeditor->Config['EnterMode'] = 'br';
-	#
-	# @var array
-
-	# public $Config
+	attr_reader :Config
 
 	# Main Constructor.
 	# Refer to the _samples/php directory for examples.
@@ -88,11 +67,11 @@ class FCKeditor
 	#
 	# @return string
 	def CreateHtml
-		@HtmlValue = htmlspecialchars(@Value)
+		@HtmlValue = Php4r.htmlspecialchars(@Value)
 		@Html = ''
 		
-		if (self.IsCompatible)
-			if (isset(@get['fcksource']) and @get['fcksource'] == "true")
+		if self.IsCompatible
+			if Php4r.isset(@get['fcksource']) and @get['fcksource'] == "true"
 				filevar = 'fckeditor.original.html'
 			else
 				filevar = 'fckeditor.html'
@@ -100,7 +79,7 @@ class FCKeditor
 			
 			linkvar = "#{@BasePath}editor/#{filevar }?InstanceName=#{@InstanceName}"
 			
-			if (@ToolbarSet != '')
+			if @ToolbarSet != ''
 				linkvar += "&amp;Toolbar=#{@ToolbarSet}"
 			end
 			
@@ -108,18 +87,18 @@ class FCKeditor
 			@Html += "<input type=\"hidden\" id=\"#{@InstanceName}\" name=\"#{@InstanceName}\" value=\"#{@HtmlValue}\" style=\"display:none\" />"
 			
 			# Render the configurations hidden field.
-			@Html += "<input type=\"hidden\" id=\"#{@InstanceName}___Config\" value=\"" + self.GetConfigFieldString + "\" style=\"display:none\" />"
+			@Html += "<input type=\"hidden\" id=\"#{@InstanceName}___Config\" value=\"#{self.GetConfigFieldString}\" style=\"display:none\" />"
 			
 			# Render the editor IFRAME.
 			@Html += "<iframe id=\"#{@InstanceName}___Frame\" src=\"#{linkvar}\" width=\"#{@Width}\" height=\"#{@Height}\" frameborder=\"0\" scrolling=\"no\"></iframe>"
 		else
-			if (strpos(@Width, '%') === false)
+			if Php4r.strpos(@Width, '%') == false
 				@Width = @Width + 'px'
 			else
 				@Width = @Width
 			end
 			
-			if (strpos(@Height, '%') === false)
+			if Php4r.strpos(@Height, '%') == false
 				@Height = @Height.to_s + 'px'
 			else
 				@Height = @Height
@@ -137,14 +116,14 @@ class FCKeditor
 	def IsCompatible
 		sAgent = @useragent
 		
-		if (strpos(sAgent, 'MSIE') != false and strpos(sAgent, 'mac') == false and strpos(sAgent, 'Opera') == false)
-			iVersion = substr(sAgent, strpos(sAgent, 'MSIE') + 5, 3).to_f
+		if Php4r.strpos(sAgent, 'MSIE') != false and Php4r.strpos(sAgent, 'mac') == false and Php4r.strpos(sAgent, 'Opera') == false
+			iVersion = Php4r.substr(sAgent, Php4r.strpos(sAgent, 'MSIE') + 5, 3).to_f
 			return (iVersion >= 5.5)
-		elsif (strpos(sAgent, 'Gecko/') != false)
-			iVersion = substr(sAgent, strpos(sAgent, 'Gecko/') + 6, 8)
+		elsif Php4r.strpos(sAgent, 'Gecko/') != false
+			iVersion = Php4r.substr(sAgent, Php4r.strpos(sAgent, 'Gecko/') + 6, 8)
 			return (iVersion.to_i >= 20030210)
-		elsif (strpos(sAgent, 'Opera/') != false)
-			fVersion = substr(sAgent, strpos(sAgent, 'Opera/') + 6, 4)
+		elsif Php4r.strpos(sAgent, 'Opera/') != false
+			fVersion = Php4r.substr(sAgent, Php4r.strpos(sAgent, 'Opera/') + 6, 4)
 			return (fVersion >= 9.5)
 		elsif sAgent and sAgent.match(/AppleWebKit\/([0-9]+)/)
 			matches = sAgent.match(/AppleWebKit\/([0-9]+)/)
@@ -163,18 +142,18 @@ class FCKeditor
 		bFirst = true
 		
 		@Config.each do |sKey, sValue|
-			if (bFirst == false)
+			if bFirst == false
 				sParams += '&amp;'
 			else
 				bFirst = false
 			end
 			
-			if (sValue === true)
-				sParams += self.EncodeConfig(sKey) + '=true'
-			elsif ( sValue === false )
-				sParams += self.EncodeConfig(sKey) + '=false'
+			if sValue == true
+				sParams += "#{self.EncodeConfig(sKey)}=true"
+			elsif sValue == false
+				sParams += "#{self.EncodeConfig(sKey)}=false"
 			else
-				sParams += self.EncodeConfig(sKey) + '=' . self.EncodeConfig(sValue)
+				sParams += "#{self.EncodeConfig(sKey)}=#{self.EncodeConfig(sValue)}"
 			end
 		end
 		
@@ -194,18 +173,6 @@ class FCKeditor
 			'"' => '%22'
 		}
 		
-		return strtr(valueToEncode, chars)
-	end
-	
-	def Value=(newvalue)
-		@Value = newvalue
-	end
-	
-	def Height=(newheight)
-		@Height = newheight
-	end
-	
-	def Width=(newwidth)
-		@Width = newwidth
+		return Php4r.strtr(valueToEncode, chars)
 	end
 end
