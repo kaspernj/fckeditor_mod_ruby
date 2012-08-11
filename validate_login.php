@@ -19,6 +19,10 @@ class fckeditor_validate_login_mod_ruby{
     file_put_contents($tmp_path, $send_data);
     
     $cmd = "ruby \"" . dirname(__FILE__) . "/validate_login.rb\" --tmp_path=\"" . $tmp_path . "\"";
+    if ($this->args["knjrbfw_path"]){
+      $cmd .= " --knjrbfw_path=\"" . $this->args["knjrbfw_path"] . "\"";
+    }
+    
     $res = knj_os::shellCMD($cmd);
     unlink($tmp_path);
     
